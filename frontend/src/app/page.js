@@ -10,6 +10,8 @@ export default function Home() {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [crmRecords, setCrmRecords] = useState([]);
+
 
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles.length > 0) {
@@ -57,6 +59,36 @@ export default function Home() {
     }
   };
 
+  const handleConfirmImport = async () => {
+    try {
+      setLoading(true);
+
+      const response = await fetch("http://localhost:5000/import", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          rows: preview,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        console.log("CRM Records:", data.result);
+        setCrmRecords(data.result);
+      } else {
+        alert("Import failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Server Error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
       <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-2xl">
@@ -96,6 +128,15 @@ export default function Home() {
         </button>
 
         {preview.length > 0 && (
+          <button
+            onClick={handleConfirmImport}
+            className="mt-4 w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700"
+          >
+            Confirm Import
+          </button>
+        )}
+
+        {preview.length > 0 && (
           <div className="mt-8 overflow-x-auto">
             <h2 className="text-2xl font-semibold mb-4 text-gray-900">
               CSV Preview
@@ -127,6 +168,54 @@ export default function Home() {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {crmRecords.length > 0 && (
+          <div className="mt-10 overflow-x-auto rounded-lg border">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-900">
+              Parsed CRM Records
+            </h2>
+
+            <table className="min-w-full border border-gray-300">
+              <thead className="bg-green-200">
+                <tr>
+                  {Object.keys(crmRecords[0]).map((key) => (
+                    <th
+                      key={key}
+                      className="border px-4 py-2 text-left whitespace-nowrap text-gray-900 bg-green-200"
+                    >
+                      {key}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+
+              <tbody>
+                {crmRecords.map((row, index) => (
+                  <tr key={index}>
+                    {Object.values(row).map((value, i) => (
+                      <td
+                        key={i}
+                        className="border px-4 py-2 whitespace-nowrap text-gray-800"
+                      >
+                        {String(value ?? "")}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <div className="mt-4">
+              <p className="font-semibold text-gray-900">
+                Total Imported: {crmRecords.length}
+              </p>
+
+              <p className="font-semibold text-gray-900">
+                Total Skipped: {preview.length - crmRecords.length}
+              </p>
+            </div>
           </div>
         )}
       </div>

@@ -1,8 +1,10 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const uploadRoutes = require("./routes/uploadRoutes");
+const importRoutes = require("./routes/importRoutes");
 
-require("dotenv").config();
 
 const app = express();
 
@@ -10,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/upload", uploadRoutes);
+app.use("/import", importRoutes);
 
 app.get("/", (req, res) => {
     res.json({
