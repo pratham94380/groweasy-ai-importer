@@ -196,17 +196,18 @@ OR
 # Screenshots
 
 ### Upload
-
-(Add Screenshot)
+screenshots/home.png
 
 ### CSV Preview
+screenshots/preview.png
 
-(Add Screenshot)
 
 ### Parsed CRM Records
+screenshots/Parsed_CRM_Records.png
 
-(Add Screenshot)
+### Skipped Records
 
+screenshots/skipped_records.png
 ---
 
 # Future Improvements
