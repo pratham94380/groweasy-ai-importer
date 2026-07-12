@@ -42,10 +42,13 @@ export default function Home() {
     try {
       setLoading(true);
 
-      const response = await fetch("http://localhost:5000/upload", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        "https://groweasy-ai-importer-backend-cxtn.onrender.com/upload",
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
 
       const data = await response.json();
 
@@ -67,15 +70,18 @@ export default function Home() {
     try {
       setLoading(true);
 
-      const response = await fetch("http://localhost:5000/import", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://groweasy-ai-importer-backend-cxtn.onrender.com/import",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            rows: allRows,
+          }),
         },
-        body: JSON.stringify({
-          rows: allRows,
-        }),
-      });
+      );
 
       const data = await response.json();
 
