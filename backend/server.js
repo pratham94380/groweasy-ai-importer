@@ -21,6 +21,11 @@ app.get("/", (req, res) => {
     });
 });
 
+
+app.get("/health", (req, res) => {
+    res.send("Backend is healthy");
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
