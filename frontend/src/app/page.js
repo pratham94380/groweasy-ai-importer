@@ -90,14 +90,14 @@ export default function Home() {
         setImported(data.imported);
         setSkipped(data.skipped);
         setSkippedRecords(data.skippedRecords);
-      }
-      else {
-        alert("Import failed");
+      } else {
+        console.error(data);
+        alert(data.message || "Import failed");
       }
     }
     catch (err) {
       console.error(err);
-      alert("Server Error");
+      alert(err.message || "Server Error");
     }
     finally {
       setLoading(false);

@@ -169,6 +169,14 @@ ${JSON.stringify(rows)}
   } catch (err) {
     console.error(err);
 
+    if (err.status === 429) {
+      return res.status(429).json({
+        success: false,
+        message:
+          "Gemini API quota exceeded. Please try again later or use another API key.",
+      });
+    }
+
     res.status(500).json({
       success: false,
       message: err.message,
